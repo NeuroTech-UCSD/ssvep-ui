@@ -1,14 +1,40 @@
 import { Grid } from '@mui/material'
+import { useEffect, useState } from 'react'
 import Button from '../button/Button'
 import './Header.css'
 
 function Header(props) {
+
+    const [timer, setTimer] = useState(props.timer)
+
+    useEffect(() => {
+        if (timer > 0) {
+            const t = setTimeout(() => {
+                setTimer(timer-1)
+            }, 1000)
+    
+            return () => { clearTimeout(t) }
+        }
+    }, [timer])
+
+    function formatTime(time) {
+        let minutes = Math.floor(time / 60)
+        let seconds = time % 60
+
+        let formattedSeconds = seconds.toLocaleString('en-US', {
+            minimumIntegerDigits: 2,
+            useGrouping: false
+          })
+
+        return minutes + ":" + formattedSeconds
+    }
+
     return (
         <div>
             <Grid container spacing={2} style={{ padding: "10px"}}>
                 <Grid item xs={8} style={{ display: "flex", alignItems: "center"}}>
                     <div style={{ fontSize: "30px", paddingLeft: "5px", letterSpacing: "1px"}}>
-                        Break: 19:05
+                        Break: {formatTime(timer)}
                     </div>
                 </Grid>
                 <Grid item xs={4} style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -32,6 +58,7 @@ function Header(props) {
                     bgColor="#E2E2E2"
                     text="Settings"
                     color="#676767"
+                    onClick={props.settingsClick}
                     />
                 </Grid>
                 <Grid item xs={4} style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
