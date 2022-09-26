@@ -3,6 +3,7 @@ import asyncio
 import settings
 import socketio
 import random
+from selenium.webdriver.common.keys import Keys
 
 sio = socketio.AsyncClient()
 PORT = settings.Configuration.app['port']
@@ -29,17 +30,32 @@ def rand_letter(x='a', y='z'):
     return chr(random.randint(ord(x), ord(y)))
 
 
-async def _dsi_simulator():
+async def _dsi_simulator(include_enter=True):
+    """
+
+    :param include_enter: whether to include enter key every N characters, N is hard set in the code
+    :return:
+    """
+    N = 5
+    count = 1
     while True:
         await sio.sleep(ISI)
-        prediction = rand_letter()
+        if include_enter:
+            if count < N:
+                count += 1
+                prediction = rand_letter()
+            else:
+                prediction = Keys.ENTER
+                count = 1
+        else:
+            prediction = rand_letter()
         print('Sending prediction:', prediction)
         await sio.emit('forward_prediction', prediction, namespace='/dsi_simulator')
 
 
 async def dsi_simulator():
     await sio.connect(f'http://localhost:{PORT}', namespaces=['/', '/dsi_simulator'])
-    await sio.start_background_task(_dsi_simulator)
+    await sio.start_background_task(_dsi_simulator, include_enter=True)
     await sio.wait()
 
 
