@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Grid, Modal, TextField, Typography } from '@mui/material';
 import './App.css';
 import Header from './header/Header';
+import socketIOClient from "socket.io-client";
 
 function App() {
 
   const [sampleText, setSampleText] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus odio arcu, porttitor et sodales at, porttitor et lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse nec ex rutrum, euismod elit in, iaculis augue. Pellentesque condimentum tellus tellus, id luctus elit faucibus vitae. Cras eros dolor, commodo eget mollis eu, accumsan nec urna. Aliquam erat volutpat. Aliquam in nunc quis velit aliquam sagittis. Maecenas vehicula bibendum consequat. Aliquam ut pellentesque tellus, non iaculis diam. Praesent tincidunt elementum orci quis aliquet. Nam at risus quis orci mattis eleifend. Etiam aliquet risus eu libero luctus, eget accumsan quam interdum. Sed lobortis lorem quis erat scelerisque tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus odio arcu, porttitor et sodales at, porttitor et lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse nec ex rutrum, euismod elit in, iaculis augue. Pellentesque condimentum tellus tellus, id luctus elit faucibus vitae. Cras eros dolor, commodo eget mollis eu, accumsan nec urna. Aliquam erat volutpat. Aliquam in nunc quis velit aliquam sagittis. Maecenas vehicula bibendum consequat. Aliquam ut pellentesque tellus, non iaculis diam. Praesent tincidunt elementum orci quis aliquet. Nam at risus quis orci mattis eleifend. Etiam aliquet risus eu libero luctus, eget accumsan quam interdum. Sed lobortis lorem quis erat scelerisque tempus.")
   const time = 19*60
   const [start, setStart] = useState(true)
+  const [counter, setCounter] = useState(1)
   const [openSettings, setOpenSettings] = useState(false)
+
+    let socket = null;
+    let port = 4002;
+    useEffect(() => {
+        socket = socketIOClient("http://localhost:" + port + '/caretaker');
+         // TODO: Remove this later
+        socket.on('get prediction', (prediction) => {
+            console.log(prediction + ', counter: ' + counter)});
+            setCounter(counter + 1);
+    }, []);
 
   const clearClick = () => {
     setSampleText("")
