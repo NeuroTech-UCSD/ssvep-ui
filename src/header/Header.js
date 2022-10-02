@@ -39,9 +39,9 @@ function Header(props) {
                 </Grid>
                 <Grid item xs={4} style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
                     <Button
-                    bgColor={props.start ? "#95E8A7" : "#FFAFAF"}
-                    text={props.start ? "Start" : "Stop"}
-                    color={props.start ? "#146812" : "#FE1F1F" }
+                    bgColor={!props.start ? "#95E8A7" : "#FFAFAF"}
+                    text={!props.start ? "Start" : "Stop"}
+                    color={!props.start ? "#146812" : "#FE1F1F" }
                     onClick = {props.startStopClick}
                     />
                 </Grid>
