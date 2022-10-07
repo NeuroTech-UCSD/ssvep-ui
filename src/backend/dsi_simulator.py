@@ -45,7 +45,7 @@ async def _dsi_simulator(include_enter=True):
                 count += 1
                 prediction = rand_letter()
             else:
-                prediction = Keys.ENTER
+                prediction = '\n'
                 count = 1
         else:
             prediction = rand_letter()

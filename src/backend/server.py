@@ -1,9 +1,8 @@
+import sys
 import socketio
 from aiohttp import web
 from datetime import datetime
 import settings
-
-
 class DSISimulatorNamespace(socketio.AsyncNamespace):
 
     def on_connect(self, sid, environ):

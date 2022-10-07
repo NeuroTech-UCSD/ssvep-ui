@@ -4,26 +4,40 @@ import './App.css';
 import Header from './header/Header';
 import socketIOClient from "socket.io-client";
 
+let port = 4002;
+const socket = socketIOClient("http://localhost:" + port + '/caretaker');
+
 function App() {
 
-  const [sampleText, setSampleText] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus odio arcu, porttitor et sodales at, porttitor et lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse nec ex rutrum, euismod elit in, iaculis augue. Pellentesque condimentum tellus tellus, id luctus elit faucibus vitae. Cras eros dolor, commodo eget mollis eu, accumsan nec urna. Aliquam erat volutpat. Aliquam in nunc quis velit aliquam sagittis. Maecenas vehicula bibendum consequat. Aliquam ut pellentesque tellus, non iaculis diam. Praesent tincidunt elementum orci quis aliquet. Nam at risus quis orci mattis eleifend. Etiam aliquet risus eu libero luctus, eget accumsan quam interdum. Sed lobortis lorem quis erat scelerisque tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus odio arcu, porttitor et sodales at, porttitor et lorem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse nec ex rutrum, euismod elit in, iaculis augue. Pellentesque condimentum tellus tellus, id luctus elit faucibus vitae. Cras eros dolor, commodo eget mollis eu, accumsan nec urna. Aliquam erat volutpat. Aliquam in nunc quis velit aliquam sagittis. Maecenas vehicula bibendum consequat. Aliquam ut pellentesque tellus, non iaculis diam. Praesent tincidunt elementum orci quis aliquet. Nam at risus quis orci mattis eleifend. Etiam aliquet risus eu libero luctus, eget accumsan quam interdum. Sed lobortis lorem quis erat scelerisque tempus.")
+  const [text, setText] = useState("")
   const time = 19*60
-  const [start, setStart] = useState(true)
-  const [counter, setCounter] = useState(1)
+  const [start, setStart] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
+  useEffect(() => {
+    if (start) {
+      socket.on('get prediction', (prediction) => {
+        let incomingText = prediction
+        if (prediction === '\n') {
+          const timestamp = '\n' + getTimeStamp()
+          incomingText = timestamp + prediction
+        }
+        setText(text + incomingText)
+      })
+    }
 
-    let socket = null;
-    let port = 4002;
-    useEffect(() => {
-        socket = socketIOClient("http://localhost:" + port + '/caretaker');
-         // TODO: Remove this later
-        socket.on('get prediction', (prediction) => {
-            console.log(prediction + ', counter: ' + counter)});
-            setCounter(counter + 1);
-    }, []);
+    return () => {
+          socket.off();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text, start]);
+
+  function getTimeStamp() {
+    const date = new Date();
+    return date.toLocaleString();
+  }
 
   const clearClick = () => {
-    setSampleText("")
+    setText("")
   }
 
   const startStopClick = () => {
@@ -35,21 +49,7 @@ function App() {
   }
 
   const processText = (text) => {
-    const words = text.split(' ')
-
-    var splitText = []
-
-    var prev = 0
-    for (var i = 11; i < words.length; i += 10) {
-      var slice = words.slice(prev, i)
-      splitText.push(slice.join(" "))
-      prev = i
-    }
-
-    var lastSlice = words.slice(prev)
-    splitText.push(lastSlice.join(" "))
-
-    return splitText
+    return text.split('\n')
   }
 
   const style = {
@@ -75,8 +75,8 @@ function App() {
       timer = {time} />
       <div className="text-stream-box">
         {
-          processText(sampleText).map((text, index) => {
-            return <div>
+          processText(text).map((text, index) => {
+            return <div key={index}>
               <Typography>
                 { text }
               </Typography>
