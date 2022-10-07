@@ -6,13 +6,19 @@ import socketIOClient from "socket.io-client";
 
 let port = 4002;
 const socket = socketIOClient("http://localhost:" + port + '/caretaker');
+let breakTime = 10*60
+let typeTime = 10*60
 
 function App() {
 
   const [text, setText] = useState("")
-  const time = 19*60
+  const [timer, setTimer] = useState(breakTime)
   const [start, setStart] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
+  const [breakMin, setBreakMin] = useState(Math.floor(breakTime / 60))
+  const [breakSec, setBreakSec] = useState(breakTime % 60)
+  const [typeMin, setTypeMin] = useState(Math.floor(typeTime / 60))
+  const [typeSec, setTypeSec] = useState(typeTime % 60)
   useEffect(() => {
     if (start) {
       socket.on('get prediction', (prediction) => {
@@ -26,7 +32,7 @@ function App() {
     }
 
     return () => {
-          socket.off();
+      socket.off();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, start]);
@@ -65,6 +71,17 @@ function App() {
     p: 4,
   };
 
+  const applySettings = () => {
+    if (start) {
+      let t = typeMin * 60 + typeSec
+      setTimer(t)
+    } else {
+      let t = breakMin * 60 + breakSec
+      setTimer(t)
+    }
+    setOpenSettings(false)
+  }
+
   return (
     <div className="app-container">
       <Header 
@@ -72,7 +89,7 @@ function App() {
       startStopClick = {startStopClick}
       settingsClick = {setSettingsClick}
       clearClick = {clearClick}
-      timer = {time} />
+      timer = {[timer, setTimer]} />
       <div className="text-stream-box">
         {
           processText(text).map((text, index) => {
@@ -99,25 +116,25 @@ function App() {
             <hr></hr>
             <Grid container spacing={2} style={{padding: '10px'}}>
               <Grid item xs={4}>
-                Speak Duration
+                Type Duration
               </Grid>
               <Grid item xs={4}>
-                <TextField type="number" defaultValue={19} label="min"></TextField>
+                <TextField type="number" value={typeMin} onChange={(event) => {setTypeMin(event.target.value)}} label="min"></TextField>
               </Grid>
               <Grid item xs={4}>
-                <TextField type="number" defaultValue={0} label="sec"></TextField>
+                <TextField type="number" value={typeSec} onChange={(event) => {setTypeSec(event.target.value)}} label="sec"></TextField>
               </Grid>
               <Grid item xs={4}>
                 Break Duration
               </Grid>
               <Grid item xs={4}>
-                <TextField type="number" defaultValue={19} label="min"></TextField>
+                <TextField type="number" value={breakMin} onChange={(event) => {setBreakMin(event.target.value)}} label="min"></TextField>
               </Grid>
               <Grid item xs={4}>
-                <TextField type="number" defaultValue={0} label="sec"></TextField>
+                <TextField type="number" value={breakSec} onChange={(event) => {setBreakSec(event.target.value)}} label="sec"></TextField>
               </Grid>
               <Grid item xs={6}>
-                <Button variant="contained">Apply</Button>
+                <Button variant="contained" onClick={applySettings} >Apply</Button>
               </Grid>
             </Grid>
           </Box>

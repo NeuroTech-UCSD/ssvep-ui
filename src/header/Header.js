@@ -5,7 +5,7 @@ import './Header.css'
 
 function Header(props) {
 
-    const [timer, setTimer] = useState(props.timer)
+    const [timer, setTimer] = props.timer
 
     useEffect(() => {
         if (timer > 0) {
@@ -14,7 +14,11 @@ function Header(props) {
             }, 1000)
     
             return () => { clearTimeout(t) }
+        } else {
+            // set start/stop
+            props.startStopClick()
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [timer])
 
     function formatTime(time) {
