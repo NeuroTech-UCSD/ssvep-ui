@@ -3,7 +3,7 @@ import socketio
 from aiohttp import web
 from datetime import datetime
 import settings
-class DSISimulatorNamespace(socketio.AsyncNamespace):
+class DSI(socketio.AsyncNamespace):
 
     def on_connect(self, sid, environ):
         print('dsi connected')
@@ -23,7 +23,7 @@ class Server:
         self.sio = socketio.AsyncServer(async_mode='aiohttp', cors_allowed_origins="*")
         self.app = web.Application()
         self.sio.attach(self.app)
-        self.sio.register_namespace(DSISimulatorNamespace('/dsi_simulator'))
+        self.sio.register_namespace(DSI('/dsi'))
         self.port = settings.Configuration.app['port']
         self.config = {'patient_id': 12345, 'date': None}
 

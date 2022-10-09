@@ -50,11 +50,11 @@ async def _dsi_simulator(include_enter=True):
         else:
             prediction = rand_letter()
         print('Sending prediction:', prediction)
-        await sio.emit('forward_prediction', prediction, namespace='/dsi_simulator')
+        await sio.emit('forward_prediction', prediction, namespace='/dsi')
 
 
 async def dsi_simulator():
-    await sio.connect(f'http://localhost:{PORT}', namespaces=['/', '/dsi_simulator'])
+    await sio.connect(f'http://localhost:{PORT}', namespaces=['/', '/dsi'])
     await sio.start_background_task(_dsi_simulator, include_enter=True)
     await sio.wait()
 
