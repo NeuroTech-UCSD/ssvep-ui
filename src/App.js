@@ -3,9 +3,11 @@ import { Box, Button, Grid, Modal, TextField, Typography } from '@mui/material';
 import './App.css';
 import Header from './header/Header';
 import socketIOClient from "socket.io-client";
+import { io } from "socket.io-client";
 
 let port = 4002;
-const socket = socketIOClient("http://localhost:" + port + '/caretaker');
+// const socket = socketIOClient("http://localhost:" + port + '/caretaker')
+const socket = io("http://localhost:" + port + '/caretaker')
 let breakTime = 10*60
 let typeTime = 10*60
 
@@ -72,14 +74,20 @@ function App() {
   };
 
   const applySettings = () => {
+    let t = typeMin * 60 + typeSec
+    let b = breakMin * 60 + breakSec
     if (start) {
-      let t = typeMin * 60 + typeSec
       setTimer(t)
     } else {
-      let t = breakMin * 60 + breakSec
-      setTimer(t)
+      setTimer(b)
     }
     setOpenSettings(false)
+    socket.emit("forward_message", {
+      'typeDuration' : t,
+      'breakDuraction' : b
+    }, (response) => {
+      console.log(response)
+    })
   }
 
   return (

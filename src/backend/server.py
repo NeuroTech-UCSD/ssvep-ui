@@ -16,6 +16,18 @@ class DSI(socketio.AsyncNamespace):
         print('received prediction:', data)
         await self.emit('get prediction', prediction, namespace='/caretaker')
 
+class Caretaker(socketio.AsyncNamespace):
+
+    def on_connect(self, sid, environ):
+        print('caretaker connected')
+
+    def on_disconnect(self, sid):
+        print('cartaker disconnected')
+
+    async def on_forward_message(self, sid, data):
+        message = data
+        print('received message:', message)
+        # await self.emit('get prediction', prediction, namespace='/caretaker')
 
 class Server:
     def __init__(self):
@@ -24,6 +36,7 @@ class Server:
         self.app = web.Application()
         self.sio.attach(self.app)
         self.sio.register_namespace(DSI('/dsi'))
+        self.sio.register_namespace(Caretaker('/caretaker'))
         self.port = settings.Configuration.app['port']
         self.config = {'patient_id': 12345, 'date': None}
 
