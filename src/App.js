@@ -7,7 +7,8 @@ import { io } from "socket.io-client";
 
 let port = 4002;
 // const socket = socketIOClient("http://localhost:" + port + '/caretaker')
-const socket = io("http://localhost:" + port + '/caretaker')
+let host = 'localhost'
+const socket = io("http://" + host + ":" + port + '/caretaker')
 let breakTime = 10*60
 let typeTime = 10*60
 
@@ -23,12 +24,10 @@ function App() {
   const [typeSec, setTypeSec] = useState(typeTime % 60)
   useEffect(() => {
     if (start) {
-      socket.on('get prediction', (prediction) => {
+      socket.on('get_message', (prediction) => {
         let incomingText = prediction
-        if (prediction === '\n') {
-          const timestamp = '\n' + getTimeStamp()
-          incomingText = timestamp + prediction
-        }
+        const timestamp = '\n' + getTimeStamp()
+        incomingText = timestamp + '\n' + prediction
         setText(text + incomingText)
       })
     }

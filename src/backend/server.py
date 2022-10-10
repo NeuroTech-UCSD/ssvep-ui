@@ -3,6 +3,8 @@ import socketio
 from aiohttp import web
 from datetime import datetime
 import settings
+
+
 class DSI(socketio.AsyncNamespace):
 
     def on_connect(self, sid, environ):
@@ -11,10 +13,11 @@ class DSI(socketio.AsyncNamespace):
     def on_disconnect(self, sid):
         print('dsi disconnected')
 
-    async def on_forward_prediction(self, sid, data):
-        prediction = data
-        print('received prediction:', data)
-        await self.emit('get prediction', prediction, namespace='/caretaker')
+    async def on_forward_message(self, sid, data):
+        message = data
+        print('Received DSI message:', data)
+        await self.emit('get_message', message, namespace='/caretaker')
+
 
 class Caretaker(socketio.AsyncNamespace):
 
@@ -26,8 +29,9 @@ class Caretaker(socketio.AsyncNamespace):
 
     async def on_forward_message(self, sid, data):
         message = data
-        print('received message:', message)
+        print('Received caretaker message:', message)
         # await self.emit('get prediction', prediction, namespace='/caretaker')
+
 
 class Server:
     def __init__(self):
@@ -54,5 +58,4 @@ class Server:
 
 if __name__ == '__main__':
     server = Server()
-    # asyncio.run(server.start_server())
     server.start_server()
