@@ -38,7 +38,7 @@ function Header(props) {
             <Grid container spacing={2} style={{ padding: "10px"}}>
                 <Grid item xs={8} style={{ display: "flex", alignItems: "center"}}>
                     <div style={{ fontSize: "30px", paddingLeft: "5px", letterSpacing: "1px"}}>
-                        Break: {formatTime(timer)}
+                        {!props.start ? "Type in" : "Break in"}: {formatTime(timer)}
                     </div>
                 </Grid>
                 <Grid item xs={4} style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -68,8 +68,9 @@ function Header(props) {
                 <Grid item xs={4} style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
                     <Button
                     bgColor="#E2E2E2"
-                    text="Ask"
+                    text={props.manual ? "Manual" : "Auto"}
                     color="#676767"
+                    onClick={() => props.setManual(!props.manual)}
                     />
                 </Grid>
             </Grid>

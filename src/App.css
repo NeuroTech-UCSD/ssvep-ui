@@ -7,9 +7,18 @@
 }
 
 .text-stream-box {
-  max-height: 100%;
+  height: 100%;
   max-width: 100%;
   overflow-y: auto;
   padding: 20px;
   font-size: 20px;
+}
+
+.send-message-box {
+  height: 120px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-top: 1px solid rgb(172, 172, 172);
 }

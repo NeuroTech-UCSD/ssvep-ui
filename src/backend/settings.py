@@ -1,6 +1,5 @@
 import yaml
 
-
 class Configuration:
     app = {}
     with open("config.yaml", "r") as stream:

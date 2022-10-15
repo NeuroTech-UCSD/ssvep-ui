@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, Grid, Modal, TextField, Typography } from '@mui/material';
 import './App.css';
 import Header from './header/Header';
-import socketIOClient from "socket.io-client";
 import { io } from "socket.io-client";
 
 let port = 4002;
-// const socket = socketIOClient("http://localhost:" + port + '/caretaker')
 let host = 'localhost'
 const socket = io("http://" + host + ":" + port + '/caretaker')
 let breakTime = 10*60
@@ -14,7 +12,7 @@ let typeTime = 10*60
 
 function App() {
 
-  const [text, setText] = useState("")
+  const [text, setText] = useState([])
   const [timer, setTimer] = useState(breakTime)
   const [start, setStart] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
@@ -22,13 +20,20 @@ function App() {
   const [breakSec, setBreakSec] = useState(breakTime % 60)
   const [typeMin, setTypeMin] = useState(Math.floor(typeTime / 60))
   const [typeSec, setTypeSec] = useState(typeTime % 60)
+  const [message, setMessage] = useState("")
+  const [manual, setManual] = useState(true)
   useEffect(() => {
     if (start) {
       socket.on('get_message', (prediction) => {
-        let incomingText = prediction
-        const timestamp = '\n' + getTimeStamp()
-        incomingText = timestamp + '\n' + prediction
-        setText(text + incomingText)
+        let incomingTS = {
+          'txt': getTimeStamp(),
+          'pred': true
+        }
+        let incomingText = {
+          'txt': prediction,
+          'pred': true
+        }
+        setText([...text, incomingTS, incomingText])
       })
     }
 
@@ -44,19 +49,22 @@ function App() {
   }
 
   const clearClick = () => {
-    setText("")
+    setText([])
   }
 
   const startStopClick = () => {
     setStart(!start)
+    let t = typeMin * 60 + typeSec
+    let b = breakMin * 60 + breakSec
+    if (start) {
+      setTimer(t)
+    } else {
+      setTimer(b)
+    }
   }
 
   const setSettingsClick = () => {
     setOpenSettings(!openSettings)
-  }
-
-  const processText = (text) => {
-    return text.split('\n')
   }
 
   const style = {
@@ -81,11 +89,20 @@ function App() {
       setTimer(b)
     }
     setOpenSettings(false)
-    socket.emit("forward_message", {
-      'typeDuration' : t,
-      'breakDuraction' : b
-    }, (response) => {
-      console.log(response)
+  }
+
+  const sendMessage = () => {
+    socket.emit("forward_message", message, (response) => {
+      let incomingTS = {
+        'txt': getTimeStamp(),
+        'pred': false
+      }
+      let incomingText = {
+        'txt': message,
+        'pred': false
+      }
+      setText([...text, incomingTS, incomingText])
+      setMessage("")
     })
   }
 
@@ -96,18 +113,26 @@ function App() {
       startStopClick = {startStopClick}
       settingsClick = {setSettingsClick}
       clearClick = {clearClick}
-      timer = {[timer, setTimer]} />
+      timer = {[timer, setTimer]}
+      manual = {manual}
+      setManual = {setManual} />
       <div className="text-stream-box">
         {
-          processText(text).map((text, index) => {
+          text.map((t, index) => {
             return <div key={index}>
-              <Typography>
-                { text }
+              <Typography
+                align={t.pred ? 'left' : 'right'}
+              >
+                { t.txt }
               </Typography>
               <br></br>
               </div>
           })
         }
+      </div>
+      <div className='send-message-box'>
+        <TextField id="outlined-basic" value={message} onChange={(event) => {setMessage(event.target.value)}} label="Send a message" variant="outlined" />
+        <Button variant="contained" onClick={sendMessage}>Send</Button>
       </div>
 
       <Modal
