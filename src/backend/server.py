@@ -30,7 +30,7 @@ class Caretaker(socketio.AsyncNamespace):
     async def on_forward_message(self, sid, data):
         message = data
         print('Received caretaker message:', message)
-        # await self.emit('get prediction', prediction, namespace='/caretaker')
+        # await self.emit('get prediction', message, namespace='/caretaker')
 
 
 class Server:

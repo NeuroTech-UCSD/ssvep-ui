@@ -14,7 +14,9 @@
 # production
 /build
 
+# cache
 __pycache__/
+src/backend/__pycache__
 *.pyc
 
 # misc
