@@ -5,8 +5,8 @@ import Header from './header/Header';
 import { io } from "socket.io-client";
 
 let port = 4002;
-let host = 'localhost'
-const socket = io("http://" + host + ":" + port + '/caretaker')
+let host = process.env.REACT_APP_HOST;
+const socket = io("http://" + host + ":" + port + '/caretaker');
 let breakTime = 10*60
 let typeTime = 10*60
 
@@ -25,6 +25,7 @@ function App() {
   useEffect(() => {
     if (start) {
       socket.on('get_message', (prediction) => {
+        console.log('get message:' + prediction)
         let incomingTS = {
           'txt': getTimeStamp(),
           'pred': true

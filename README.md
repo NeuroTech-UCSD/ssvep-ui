@@ -105,3 +105,8 @@ to make sure that it's listening to the same port the server is on.
 
 To change port for server and dsi-simulator, go to `src/backend/config.yaml`. Just note that the server port cannot be
 the same port as the frontend port. 
+
+## Docker
+* `docker build . -t frontend`
+* `docker run -p 3000:3000 -e NAME="100.112.226.8" frontend`
+* Then go on http://100.112.226.8:3000/
