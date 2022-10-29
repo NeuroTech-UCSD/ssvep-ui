@@ -2,3 +2,4 @@ python_socketio==5.6.0
 aiohttp==3.8.1
 pyyaml
 selenium
+python-dotenv

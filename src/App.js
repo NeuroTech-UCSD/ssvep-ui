@@ -4,8 +4,21 @@ import './App.css';
 import Header from './header/Header';
 import { io } from "socket.io-client";
 
-let port = 4002;
-let host = process.env.REACT_APP_HOST;
+let port = -1;
+let host = '';
+
+if (typeof process.env.APP_PORT == 'undefined') {
+    port = 4002;
+} else {
+    port = process.env.APP_PORT;
+}
+
+if (typeof process.env.REACT_APP_HOST == 'undefined') {
+    host = '192.168.156.132';
+} else {
+    host = process.env.REACT_APP_HOST;
+}
+
 const socket = io("http://" + host + ":" + port + '/caretaker');
 let breakTime = 10*60
 let typeTime = 10*60
@@ -25,6 +38,7 @@ function App() {
   useEffect(() => {
     if (start) {
       socket.on('get_message', (prediction) => {
+        // dsi
         console.log('get message:' + prediction)
         let incomingTS = {
           'txt': getTimeStamp(),
@@ -36,6 +50,24 @@ function App() {
         }
         setText([...text, incomingTS, incomingText])
       })
+
+      if (manual) {
+      } else {
+        socket.on('chatbot_message', (prediction) => {
+            console.log('get chatbot message:' + prediction)
+            let incomingTS = {
+              'txt': getTimeStamp(),
+              'pred': false
+            }
+            let incomingText = {
+              'txt': prediction,
+              'pred': false
+            }
+            setText([...text, incomingTS, incomingText])
+            socket.emit("forward_message", prediction, (response) => {
+            })
+        })
+      }
     }
 
     return () => {

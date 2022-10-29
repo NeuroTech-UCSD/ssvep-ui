@@ -2,7 +2,7 @@ import sys
 import socketio
 from aiohttp import web
 from datetime import datetime
-import settings
+from src.backend import settings
 
 
 class DSI(socketio.AsyncNamespace):
@@ -51,8 +51,8 @@ class Server:
         print(data)
 
     def start_server(self):
-        self.sio.on('get config', self.get_config)
-        self.sio.on('form submitted', self.display_config)
+        # self.sio.on('get config', self.get_config)
+        # self.sio.on('form submitted', self.display_config)
         web.run_app(self.app, host='0.0.0.0', port=self.port)  # we're using local host here
 
 

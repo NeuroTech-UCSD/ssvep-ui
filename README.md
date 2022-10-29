@@ -107,6 +107,6 @@ To change port for server and dsi-simulator, go to `src/backend/config.yaml`. Ju
 the same port as the frontend port. 
 
 ## Docker
-* `docker build . -t frontend`
-* `docker run -p 3000:3000 -e NAME="100.112.226.8" frontend`
-* Then go on http://100.112.226.8:3000/
+* `docker build . -t ssvep-ui`
+* `docker run -p 3000:3000 -e REACT_APP_HOST="100.112.254.11" -e APP_PORT=4002 ssvep-ui`
+* Then go on http://100.112.254.11:3000

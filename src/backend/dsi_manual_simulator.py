@@ -5,15 +5,14 @@ import socketio
 import random
 from selenium.webdriver.common.keys import Keys
 
+
 sio = socketio.AsyncClient()
 PORT = settings.Configuration.app['port']
 HOST = settings.Configuration.app['host']
-ISI = 3  # inter-stimulus-interval in seconds
-
 
 @sio.event
 async def connect():
-    print('dsi simulator connected')
+    print('dsi manual simulator connected')
 
 
 @sio.event
@@ -23,25 +22,17 @@ async def connect_error(e):
 
 @sio.event
 async def disconnect():
-    print('dsi simulator disconnected')
-
-
-# generate a random letter in the range x - y
-def rand_letter(x='a', y='z'):
-    return chr(random.randint(ord(x), ord(y)))
-
+    print('dsi manual simulator disconnected')
 
 async def _dsi_simulator():
     """
 
     :return:
     """
-    N = 5
     while True:
-        await sio.sleep(ISI)
-        dsi_message = ''
-        for i in range(N):
-            dsi_message += rand_letter()
+        await sio.sleep(0.5)
+        print("Enter a message for dsi:", end=" ")
+        dsi_message = str(input())
         print('DSI simulator sending message:', dsi_message)
         await sio.emit('forward_message', dsi_message, namespace='/dsi')
 

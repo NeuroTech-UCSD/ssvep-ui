@@ -1,12 +1,13 @@
 import time
 import asyncio
-import settings
+from src.backend import settings
 import socketio
 import random
 from selenium.webdriver.common.keys import Keys
 
 sio = socketio.AsyncClient()
 PORT = settings.Configuration.app['port']
+HOST = settings.Configuration.app['host']
 ISI = 3  # inter-stimulus-interval in seconds, will be replaced by message sent
 
 
@@ -46,7 +47,7 @@ async def _frontend_simulator():
 
 
 async def frontend_simulator():
-    await sio.connect(f'http://localhost:{PORT}', namespaces=['/', '/caretaker'])
+    await sio.connect(f'http://{HOST}:{PORT}', namespaces=['/', '/caretaker'])
     await sio.start_background_task(_frontend_simulator)
     await sio.wait()
 
