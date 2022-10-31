@@ -5,7 +5,7 @@
 #### `pip install -r requirements.txt`
 #### `pip install -e .` to trigger `setup.py`
 #### `npm install`
-#### `npm start` starts the react app, runs the app in the development mode.
+#### `npm start` starts the react app, runs the app in the development mode. For running everything without cloning other repos, refer to microservices
 
 ### Microservices
 
