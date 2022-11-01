@@ -5,7 +5,45 @@ the patient and the caretaker are using the same network. For more information, 
 to https://github.com/NeuroTech-UCSD/Oz-Speller. It is also compatible with the chatbot feature, please refer
 to https://github.com/NeuroTech-UCSD/Conversational-Agents-for-Hospitalized-Agents.
 
-## Activate caretaker with docker
+## App Design
+
+Caretakers and ALS patients are able to communicate in a text message format. There are a number of features that come with
+this application: start/stop, clear, settings, and manual/auto.
+
+### Start/Stop
+<img src="https://user-images.githubusercontent.com/42593027/199354553-d44fcf19-e477-4c1d-be1e-4ef02565e953.png" width="300" height="auto">
+
+Since it can be physically and mentally taxing to be typing all of the time, we implemented the ability for the caretaker 
+to start/stop the communication pipeline so that they can give the patients a break. Additionally, each stop (break) and
+start (type) session has a timer to encourage the patient to rest their eyes while using the speller. When the timer on typing
+runs out, the patient will be able to take a break before starting to type again. This is useful so that patients can have
+consistent breaks without needing a caretaker's assistance.
+
+### Clear
+<img src="https://user-images.githubusercontent.com/42593027/199355091-edb94297-6c2c-4b28-956c-cd3be3f40c91.png" width="300" height="auto">
+
+After awhile, the chat buffer can become very large due to the speller being projected as a primary form of communication. To
+make chatting more manageable, the caretaker has the ability to clear chat history to clean their screen up and reduce possible
+lag due to high volume.
+
+### Settings
+<img src="https://user-images.githubusercontent.com/42593027/199355276-c84eda4f-0353-42a3-a28d-82518d30f955.png" width="300" height="auto">
+
+The caretake also has the ability to set the settings of the duration of each break/type session. This allows patients to cater
+the duration of their communication sessions to their needs.
+
+### Manual/Auto
+![image](https://user-images.githubusercontent.com/42593027/199355877-a416b34d-bedb-49c5-bc9f-64f6a78c14f1.png)
+![image](https://user-images.githubusercontent.com/42593027/199355824-574f92e4-273f-4fc8-aba0-3ed7f20f1023.png)
+
+The caretaker also has the ability to set responses to patients as manual or auto. Manual mode means that the caretaker is
+physically responding to the patient. Auto mode means that our AI chatbot is generating responses to the patient. The reason
+for this feature is so that we can further give the patient autonomy by giving them fast, generated responses so that the
+patient does not need to experience latency waiting for the caretaker to respond to them. Additionally, in the future, there are
+directions to use the chatbot or another program to auto recognize a subset of commands so that the app can perform tasks
+for the patient such as initiating calls with friends and family without caretaker assistance.
+
+## Activate Caretaker with Docker
 
 * `docker pull ghcr.io/neurotech-ucsd/ssvep-ui:master`
 * `docker run -p 3000:3000 -e REACT_APP_HOST="100.112.254.11" -e APP_PORT=4002 ghcr.io/neurotech-ucsd/ssvep-ui:master`
