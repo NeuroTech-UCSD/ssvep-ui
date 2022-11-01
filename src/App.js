@@ -14,7 +14,7 @@ if (typeof process.env.APP_PORT == 'undefined') {
 }
 
 if (typeof process.env.REACT_APP_HOST == 'undefined') {
-    host = '192.168.156.132';
+    host = '100.112.254.11';
 } else {
     host = process.env.REACT_APP_HOST;
 }

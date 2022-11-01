@@ -30,7 +30,7 @@ async def _dsi_simulator():
     :return:
     """
     while True:
-        await sio.sleep(0.5)
+        await sio.sleep(1)
         print("Enter a message for dsi:", end=" ")
         dsi_message = str(input())
         print('DSI simulator sending message:', dsi_message)
