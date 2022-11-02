@@ -4,6 +4,7 @@ This app allows the ALS patient to communicate with the caretaker via any laptop
 the patient and the caretaker are using the same network. For more information, refers
 to https://github.com/NeuroTech-UCSD/Oz-Speller. It is also compatible with the chatbot feature, please refer
 to https://github.com/NeuroTech-UCSD/Conversational-Agents-for-Hospitalized-Agents.
+To see the full video explaination of the project, please go to [Oz-Speller, the SSVEP EEG Virtual Keyboard | Triton NeuroTech 2022](https://www.youtube.com/watch?v=lCYkRotGZEc)
 
 ## App Design
 
