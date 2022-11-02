@@ -5,11 +5,14 @@ the patient and the caretaker are using the same network. For more information, 
 to https://github.com/NeuroTech-UCSD/Oz-Speller. It is also compatible with the chatbot feature, please refer
 to https://github.com/NeuroTech-UCSD/Conversational-Agents-for-Hospitalized-Agents.
 To see the full video explaination of the project, please go to [Oz-Speller, the SSVEP EEG Virtual Keyboard | Triton NeuroTech 2022](https://www.youtube.com/watch?v=lCYkRotGZEc)
+<br>
+
 
 ## App Design
-
+<img src="images/chatbot_final.gif" width="300" height="auto"> <br>
 Caretakers and ALS patients are able to communicate in a text message format. There are a number of features that come with
-this application: start/stop, clear, settings, and manual/auto.
+this application: start/stop, clear, settings, and manual/auto. <br>
+
 
 ### Start/Stop
 <img src="https://user-images.githubusercontent.com/42593027/199354553-d44fcf19-e477-4c1d-be1e-4ef02565e953.png" width="300" height="auto">
